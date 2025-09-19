@@ -1,0 +1,13 @@
+{
+  "AUTH": {
+    "REGISTER": "Crear cuenta",
+    "NAME": "Nombre",
+    "EMAIL": "Correo electrónico",
+    "PASSWORD": "Contraseña",
+    "CREATE_ACCOUNT": "Registrar",
+    "REGISTER_SUCCESS": "Usuario {{email}} creado exitosamente.",
+    "ERROR": {
+      "GENERIC": "Ha ocurrido un error. Inténtalo nuevamente."
+    }
+  }
+}
