@@ -1,13 +1,37 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">home</ion-title>
+      <ion-title size="large">Home</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div class="ion-padding">
+    <h2>Bienvenido 🎉</h2>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="goToGallery()">
+        <ion-icon name="images"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button (click)="goToProfile()">
+        <ion-icon name="person"></ion-icon>
+      </ion-fab-button>
+
+      <ion-fab-button color="danger" (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

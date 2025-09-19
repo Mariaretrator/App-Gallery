@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   UserCredential,
+  onAuthStateChanged
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { AppUser } from 'src/app/shared/interface/user.interface';
@@ -69,4 +70,13 @@ export class AuthService {
   async logout() {
     return signOut(firebaseAuth);
   }
+
+  isAuthenticated(): Promise<boolean> {
+    return new Promise((resolve) => {
+      const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
+        unsubscribe(); 
+        resolve(!!user);
+      });
+    });
+  }  
 }

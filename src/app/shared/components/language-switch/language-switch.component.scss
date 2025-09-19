@@ -1,0 +1,15 @@
+.lang-switch {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  
+    label {
+      cursor: pointer;
+      font-weight: 500;
+    }
+  
+    input {
+      margin-right: 0.25rem;
+    }
+  }
+  

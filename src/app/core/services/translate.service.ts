@@ -5,14 +5,35 @@ import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
   providedIn: 'root'
 })
 export class TranslateService {
+  private supportedLangs = ['es', 'en'];
+
   constructor(private translate: NgxTranslateService) {
-    this.translate.addLangs(['es', 'en']);
-    this.translate.setDefaultLang('es');
-    this.translate.use('es');
+    this.initLanguage();
+  }
+
+  private initLanguage() {
+    const savedLang = localStorage.getItem('app_lang');
+
+    if (savedLang && this.supportedLangs.includes(savedLang)) {
+      this.use(savedLang);
+      return;
+    }
+
+    const browserLang = this.translate.getBrowserLang();
+
+    if (browserLang && this.supportedLangs.includes(browserLang)) {
+      this.use(browserLang);
+    } else {
+      this.use('en'); 
+    }
   }
 
   use(lang: string) {
+    if (!this.supportedLangs.includes(lang)) {
+      lang = 'en';
+    }
     this.translate.use(lang);
+    localStorage.setItem('app_lang', lang);
   }
 
   instant(key: string, params?: any) {
@@ -21,9 +42,5 @@ export class TranslateService {
 
   getCurrentLang(): string {
     return this.translate.currentLang || this.translate.getDefaultLang();
-  }
-
-  getAvailableLangs(): string[] {
-    return this.translate.getLangs();
   }
 }

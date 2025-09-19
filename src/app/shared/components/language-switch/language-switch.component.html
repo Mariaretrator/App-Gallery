@@ -1,12 +1,23 @@
 <div class="lang-switch">
-  <label *ngFor="let lang of langs">
-    <input 
-      type="radio" 
-      name="language" 
-      [value]="lang" 
-      [checked]="lang === currentLang"
-      (change)="changeLang(lang)"
+  <label>
+    <input
+      type="radio"
+      name="lang"
+      value="es"
+      [checked]="currentLang === 'es'"
+      (change)="switchLang('es')"
     />
-    {{ lang | uppercase }}
+    Español
+  </label>
+
+  <label>
+    <input
+      type="radio"
+      name="lang"
+      value="en"
+      [checked]="currentLang === 'en'"
+      (change)="switchLang('en')"
+    />
+    English
   </label>
 </div>

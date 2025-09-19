@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from 'src/app/core/services/translate.service';
-
 
 @Component({
   selector: 'app-language-switch',
@@ -8,19 +7,15 @@ import { TranslateService } from 'src/app/core/services/translate.service';
   styleUrls: ['./language-switch.component.scss'],
   standalone: false
 })
-export class LanguageSwitchComponent implements OnInit {
-  currentLang!: string;
-  langs: string[] = [];
+export class LanguageSwitchComponent {
+  currentLang: string;
 
-  constructor(private translateService: TranslateService) {}
-
-  ngOnInit() {
-    this.currentLang = this.translateService.getCurrentLang();
-    this.langs = this.translateService.getAvailableLangs();
+  constructor(private translate: TranslateService) {
+    this.currentLang = this.translate.getCurrentLang();
   }
 
-  changeLang(lang: string) {
-    this.translateService.use(lang);
+  switchLang(lang: string) {
+    this.translate.use(lang);
     this.currentLang = lang;
   }
 }
