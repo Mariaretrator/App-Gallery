@@ -1,8 +1,9 @@
-import { environment } from 'src/environments/environment';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { environment } from 'src/environments/environment';
 
-export const firebaseApp = initializeApp(environment.firebaseConfig);
-export const firebaseAuth = getAuth(firebaseApp);
-export const firebaseDB = getFirestore(firebaseApp);
+const app = initializeApp(environment.firebaseConfig);
+
+export const firebaseAuth = getAuth(app);
+export const firebaseDB = getFirestore(app);

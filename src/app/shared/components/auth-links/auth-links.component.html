@@ -1,0 +1,15 @@
+<div class="auth-links">
+  <ng-container *ngIf="mode === 'login'">
+    <p>
+      {{ 'AUTH.NO_ACCOUNT' | translate }}
+      <a (click)="goToRegister()">{{ 'AUTH.CREATE_ACCOUNT' | translate }}</a>
+    </p>
+  </ng-container>
+
+  <ng-container *ngIf="mode === 'register'">
+    <p>
+      {{ 'AUTH.ALREADY_ACCOUNT' | translate }}
+      <a (click)="goToLogin()">{{ 'AUTH.LOGIN' | translate }}</a>
+    </p>
+  </ng-container>
+</div>

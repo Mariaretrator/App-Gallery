@@ -4,12 +4,11 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { TranslateService } from 'src/app/core/services/translate.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class RegisterPage {
   form: FormGroup;
@@ -24,25 +23,22 @@ export class RegisterPage {
     this.form = this.fb.group({
       displayName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
   async onSubmit() {
-    if (this.form.invalid) return;
-
-    this.isSubmitting = true;
+    const { email, password } = this.form.value;
     try {
-      const { displayName, email, password } = this.form.value;
-      const user = await this.authService.register(email, password, displayName);
-
-      const msg = this.translate.instant('AUTH.REGISTER_SUCCESS', { email: user.email });
-      this.toast.present(msg, 'success');
-    } catch (err) {
-      const errorMsg = this.translate.instant('AUTH.ERROR.GENERIC');
-      this.toast.present(errorMsg, 'danger');
-    } finally {
-      this.isSubmitting = false;
+      await this.authService.register(email, password);
+      console.log('Registro exitoso');
+    } catch (error: any) {
+      console.error('Error en registro:', error);
+      if (error.code === 'auth/email-already-in-use') {
+        alert('Este correo ya está registrado. Intenta iniciar sesión.');
+      } else {
+        alert('Ocurrió un error al registrar. Intenta nuevamente.');
+      }
     }
   }
 }

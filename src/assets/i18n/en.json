@@ -8,6 +8,9 @@
     "REGISTER_SUCCESS": "User {{email}} created successfully.",
     "ERROR": {
       "GENERIC": "An error occurred. Please try again."
-    }
+    },
+    "NO_ACCOUNT": "Don't have an account?",
+    "ALREADY_ACCOUNT": "Already have an account?",
+    "LOGIN": "Login"
   }
 }
