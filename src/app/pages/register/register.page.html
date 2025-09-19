@@ -1,33 +1,43 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>{{ 'AUTH.REGISTER' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">{{ 'AUTH.NAME' | translate }}</ion-label>
-      <ion-input formControlName="displayName"></ion-input>
-    </ion-item>
+<ion-content class="register-page" [fullscreen]="true">
 
-    <ion-item>
-      <ion-label position="floating">{{ 'AUTH.EMAIL' | translate }}</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
+  <ion-card class="register-card">
+    
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-    <ion-item>
-      <ion-label position="floating">{{ 'AUTH.PASSWORD' | translate }}</ion-label>
-      <ion-input type="password" formControlName="password"></ion-input>
-    </ion-item>
+      <h2 class="card-title">{{ 'AUTH.REGISTER' | translate }}</h2>
 
-    <ion-button expand="full" type="submit" [disabled]="isSubmitting">
-      {{ 'AUTH.CREATE_ACCOUNT' | translate }}
-    </ion-button>
-  </form>
+      <ion-item lines="none" class="input-item">
+        <ion-label position="floating">{{ 'AUTH.NAME' | translate }}</ion-label>
+        <ion-input formControlName="displayName"></ion-input>
+      </ion-item>
 
-  <app-language-switch></app-language-switch>
-  <app-auth-links mode="register"></app-auth-links>
+      <ion-item lines="none" class="input-item">
+        <ion-label position="floating">{{ 'AUTH.EMAIL' | translate }}</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
 
+      <ion-item lines="none" class="input-item">
+        <ion-label position="floating">{{ 'AUTH.PASSWORD' | translate }}</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" type="submit" [disabled]="isSubmitting" class="register-btn">
+        {{ 'AUTH.CREATE_ACCOUNT' | translate }}
+      </ion-button>
+
+    </form>
+
+    <div class="register-links">
+      <app-language-switch></app-language-switch>
+      <app-auth-links mode="register"></app-auth-links>
+    </div>
+
+  </ion-card>
 
 </ion-content>

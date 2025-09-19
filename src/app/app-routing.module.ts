@@ -23,7 +23,11 @@ const routes: Routes = [
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
     canActivate: [AuthGuard],
+  },  {
+    path: 'update-user-info',
+    loadChildren: () => import('./pages/update-user-info/update-user-info.module').then( m => m.UpdateUserInfoPageModule)
   },
+
 ];
 
 @NgModule({
