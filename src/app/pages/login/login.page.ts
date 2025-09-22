@@ -30,24 +30,25 @@ export class LoginPage {
 
   async onSubmit() {
     if (this.form.invalid) return;
-
+  
     this.isSubmitting = true;
     try {
       const { email, password } = this.form.value;
       const user = await this.authService.login(email, password);
-
+  
       const msg = this.translate.instant('AUTH.LOGIN_SUCCESS', {
         email: user.email,
       });
-      this.toast.present(msg, 'success');
-
+      this.toast.success(msg);
+  
       this.router.navigateByUrl('/home', { replaceUrl: true });
     } catch (err) {
       console.error('Error en login:', err);
       const errorMsg = this.translate.instant('AUTH.ERROR.INVALID_CREDENTIALS');
-      this.toast.present(errorMsg, 'danger');
+      this.toast.error(errorMsg);
     } finally {
       this.isSubmitting = false;
     }
   }
+  
 }

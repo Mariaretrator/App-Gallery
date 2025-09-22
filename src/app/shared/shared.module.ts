@@ -7,8 +7,9 @@ import { AuthLinksComponent } from './components/auth-links/auth-links.component
 import { LanguageSwitchComponent } from './components/language-switch/language-switch.component';
 import { CardComponent } from './components/card/card.component';
 import { RouterModule } from '@angular/router';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
-const MODULE = [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, TranslateModule , RouterModule]
+const MODULE = [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, TranslateModule , RouterModule , AngularFirestoreModule]
 const COMPONENTS = [AuthLinksComponent , LanguageSwitchComponent , CardComponent]
 
 @NgModule({

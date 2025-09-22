@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { FilePickerService } from './file-picker.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ImageEntity } from 'src/app/shared/interface/image.interface';
-
+import { FilePickerService } from './file-picker.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,19 @@ export class UploaderService {
     return image;
   }
 
-  getImages() {
-    return this.firestore.collection<ImageEntity>(this.collectionName, ref => ref.orderBy('createdAt', 'desc')).valueChanges({ idField: 'id' });
+  getImages(): Observable<ImageEntity[]> {
+    return this.firestore
+      .collection<ImageEntity>(this.collectionName, ref => ref.orderBy('createdAt', 'desc'))
+      .snapshotChanges()
+      .pipe(
+        map(actions =>
+          actions.map(a => {
+            const data = a.payload.doc.data() as ImageEntity;
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          })
+        )
+      );
   }
 
   async deleteImage(image: ImageEntity) {

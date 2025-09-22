@@ -1,7 +1,8 @@
 export interface AppUser {
   uid: string;
   email: string | null;
-  displayName?: string;
+  firstName?: string;
+  lastName?: string;
   photoURL?: string;
   createdAt: number;
 }

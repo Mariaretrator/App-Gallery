@@ -1,69 +1,48 @@
 import { Injectable } from '@angular/core';
-import { firebaseAuth, firebaseDB } from '../firebase.config';
+import { firebaseAuth } from '../firebase.config';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  UserCredential,
-  onAuthStateChanged
+  User,
+  UserCredential
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
 import { AppUser } from 'src/app/shared/interface/user.interface';
+import { UserService } from 'src/app/shared/services/user.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor() {}
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
 
-  async register(
-    email: string,
-    password: string,
-    displayName?: string
-  ): Promise<AppUser> {
-    const cred: UserCredential = await createUserWithEmailAndPassword(
-      firebaseAuth,
-      email,
-      password
-    );
+  constructor(private userService: UserService) {
+    firebaseAuth.onAuthStateChanged((user) => {
+      this.currentUserSubject.next(user);
+    });
+  }
+
+  async register(email: string, password: string, firstName: string, lastName: string): Promise<AppUser> {
+    const cred: UserCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
 
     const user: AppUser = {
       uid: cred.user.uid,
       email: cred.user.email!,
-      displayName: displayName || '',
+      firstName,
+      lastName,
       photoURL: cred.user.photoURL || '',
       createdAt: Date.now(),
     };
 
-    await setDoc(
-      doc(firebaseDB, 'users', user.uid),
-      { ...user },
-      { merge: true }
-    );
+    await this.userService.createUser(user);
+
+    await signOut(firebaseAuth);
 
     return user;
   }
 
-  async getUserDataFromFirestore(): Promise<AppUser | null> {
-    const user = firebaseAuth.currentUser;
-    if (!user) return null;
-
-    const userRef = doc(firebaseDB, 'users', user.uid);
-    const snap = await getDoc(userRef);
-
-    if (snap.exists()) {
-      return snap.data() as AppUser;
-    } else {
-      return null;
-    }
-  }
-
   async login(email: string, password: string) {
-    const cred = await signInWithEmailAndPassword(
-      firebaseAuth,
-      email,
-      password
-    );
+    const cred = await signInWithEmailAndPassword(firebaseAuth, email, password);
     return cred.user;
   }
 
@@ -71,12 +50,11 @@ export class AuthService {
     return signOut(firebaseAuth);
   }
 
-  isAuthenticated(): Promise<boolean> {
-    return new Promise((resolve) => {
-      const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-        unsubscribe(); 
-        resolve(!!user);
-      });
-    });
-  }  
+  isAuthenticated(): boolean {
+    return this.currentUserSubject.value !== null;
+  }
+
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
 }
