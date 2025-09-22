@@ -14,23 +14,25 @@
   <div class="ion-padding">
     <h2>Bienvenido 🎉</h2>
 
-    <!-- Grid de imágenes usando CardComponent -->
     <ion-grid>
       <ion-row>
-        <ion-col size="6" *ngFor="let image of images">
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let image of images">
           <app-card [image]="image" (deleteImage)="deleteImage($event)"></app-card>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
 
-  <!-- FAB flotante -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="uploadImage()">
-      <ion-icon name="add"></ion-icon>
+    <ion-fab-button>
+      <ion-icon name="menu"></ion-icon>
     </ion-fab-button>
 
     <ion-fab-list side="top">
+      <ion-fab-button color="success" (click)="uploadImage()">
+        <ion-icon name="cloud-upload"></ion-icon>
+      </ion-fab-button>
+
       <ion-fab-button (click)="goToGallery()">
         <ion-icon name="images"></ion-icon>
       </ion-fab-button>
