@@ -1,16 +1,17 @@
 {
   "AUTH": {
     "REGISTER": "Registro",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellido",
+    "EMAIL": "Correo",
+    "PASSWORD": "Contraseña",
+    "CREATE_ACCOUNT": "Crear cuenta",
     "REGISTER_SUCCESS": "Usuario {{email}} creado con éxito",
     "USER_FETCHED": "Bienvenido {{name}}",
     "ERROR": {
       "GENERIC": "Ha ocurrido un error inesperado",
       "NO_USER": "No se encontraron datos en Firestore"
     },
-    "NAME": "Nombre",
-    "EMAIL": "Correo",
-    "PASSWORD": "Contraseña",
-    "CREATE_ACCOUNT": "Crear cuenta",
     "NO_ACCOUNT": "¿No tienes cuenta?",
     "ALREADY_ACCOUNT": "¿Ya tienes una cuenta?",
     "LOGIN": "Iniciar sesión"

@@ -1,7 +1,8 @@
 {
   "AUTH": {
     "REGISTER": "Create account",
-    "NAME": "Name",
+    "FIRST_NAME": "First name",
+    "LAST_NAME": "Last name",
     "EMAIL": "Email",
     "PASSWORD": "Password",
     "CREATE_ACCOUNT": "Register",
