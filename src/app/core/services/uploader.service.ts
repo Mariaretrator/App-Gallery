@@ -4,40 +4,49 @@ import { ImageEntity } from 'src/app/shared/interface/image.interface';
 import { FilePickerService } from './file-picker.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from './auth.service'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploaderService {
-  private collectionName = 'imagen';
-
   constructor(
     private filePicker: FilePickerService,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private authService: AuthService
   ) {}
 
   async pickAndUploadImage(): Promise<ImageEntity | null> {
     const file = await this.filePicker.pickFile();
     if (!file) return null;
-
-    const url = await this.filePicker.uploadFile(file);
+  
+    const url = await this.filePicker.uploadFile(file); 
     if (!url) return null;
-
+  
+    const uid = this.authService.currentUserUid();
+    if (!uid) return null;
+  
     const image: ImageEntity = {
       name: file.name,
-      url,
+      url, 
       createdAt: new Date()
     };
-
-    const docRef = await this.firestore.collection<ImageEntity>(this.collectionName).add(image);
+  
+    const docRef = await this.firestore
+      .collection(`users/${uid}/wallpapers`)
+      .add(image);
+  
     image.id = docRef.id;
-
     return image;
   }
+  
 
   getImages(): Observable<ImageEntity[]> {
+    const uid = this.authService.currentUserUid();
+    if (!uid) return new Observable<ImageEntity[]>(observer => observer.next([]));
+
     return this.firestore
-      .collection<ImageEntity>(this.collectionName, ref => ref.orderBy('createdAt', 'desc'))
+      .collection<ImageEntity>(`users/${uid}/wallpapers`, ref => ref.orderBy('createdAt', 'desc'))
       .snapshotChanges()
       .pipe(
         map(actions =>
@@ -51,7 +60,12 @@ export class UploaderService {
   }
 
   async deleteImage(image: ImageEntity) {
-    if (!image.id) return;
-    await this.firestore.collection(this.collectionName).doc(image.id).delete();
+    const uid = this.authService.currentUserUid();
+    if (!uid || !image.id) return;
+
+    await this.firestore
+      .collection(`users/${uid}/wallpapers`)
+      .doc(image.id)
+      .delete();
   }
 }

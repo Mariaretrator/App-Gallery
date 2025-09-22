@@ -21,7 +21,7 @@ export class FilePickerService {
   }
 
   private convertPickedFileToFile(pickedFile: PickedFile): File {
-    // Si el picker trae un blob (Android/iOS)
+
     if ((pickedFile as any).blob) {
       return new File([(pickedFile as any).blob], pickedFile.name, {
         type: pickedFile.mimeType
@@ -51,18 +51,19 @@ export class FilePickerService {
     try {
       const { data, error } = await this.supabaseService.client.storage
         .from(folder)
-        .upload(file.name, file, { upsert: true });
-
+        .upload(`${Date.now()}_${file.name}`, file, { upsert: true });
+  
       if (error) throw error;
-
+  
       const { data: publicUrlData } = this.supabaseService.client.storage
         .from(folder)
-        .getPublicUrl(file.name);
-
+        .getPublicUrl(`${data.path}`);
+  
       return publicUrlData.publicUrl;
     } catch (err) {
       console.error('Error uploading file', err);
       return null;
     }
   }
+  
 }

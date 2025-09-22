@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, collectionData, deleteDoc, doc } from '@angular/fire/firestore';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { Auth } from '@angular/fire/auth';
 import { FilePickerService } from './file-picker.service';
 import { ImageEntity } from 'src/app/shared/interface/image.interface';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from 'firebase/auth';
-import { map, Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ import { map, Observable } from 'rxjs';
 export class WallpaperService {
   constructor(
     private firestore: Firestore,
+    private storage: Storage,
     private auth: Auth,
     private filePicker: FilePickerService
   ) {}
@@ -25,9 +26,14 @@ export class WallpaperService {
       const uid = this.auth.currentUser?.uid;
       if (!uid) throw new Error('No authenticated user');
 
-      const url = await this.filePicker.uploadFile(file, 'imagen');
-      if (!url) return null;
 
+      const fileRef = ref(this.storage, `users/${uid}/wallpapers/${file.name}`);
+      await uploadBytes(fileRef, file);
+
+  
+      const url = await getDownloadURL(fileRef);
+
+ 
       const wallpaper: ImageEntity = {
         id: uuidv4(),
         name: file.name,
@@ -35,8 +41,9 @@ export class WallpaperService {
         createdAt: new Date()
       };
 
-      const ref = collection(this.firestore, `users/${uid}/wallpapers`);
-      await addDoc(ref, wallpaper);
+
+      const refCollection = collection(this.firestore, `users/${uid}/wallpapers`);
+      await addDoc(refCollection, wallpaper);
 
       return wallpaper;
     } catch (err) {
@@ -45,12 +52,13 @@ export class WallpaperService {
     }
   }
 
+  
   getWallpapers(): Observable<ImageEntity[]> {
     const uid = this.auth.currentUser?.uid;
     if (!uid) throw new Error('No authenticated user');
 
-    const ref = collection(this.firestore, `users/${uid}/wallpapers`);
-    return collectionData(ref, { idField: 'id' }).pipe(
+    const refCollection = collection(this.firestore, `users/${uid}/wallpapers`);
+    return collectionData(refCollection, { idField: 'id' }).pipe(
       map((data) => data as ImageEntity[])
     );
   }
@@ -59,7 +67,7 @@ export class WallpaperService {
     const uid = this.auth.currentUser?.uid;
     if (!uid) throw new Error('No authenticated user');
 
-    const ref = doc(this.firestore, `users/${uid}/wallpapers/${id}`);
-    await deleteDoc(ref);
+    const docRef = doc(this.firestore, `users/${uid}/wallpapers/${id}`);
+    await deleteDoc(docRef);
   }
 }
